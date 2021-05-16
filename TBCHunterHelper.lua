@@ -326,7 +326,7 @@ end
         _mainTimelineSteady[i]:Hide()
 
         _mainTimelineSteadyIcon[i] = _parentFrame:CreateTexture()
-	_mainTimelineSteadyIcon[i]:SetTexture(GetSpellTexture("Serpent Sting"))
+	_mainTimelineSteadyIcon[i]:SetTexture(GetSpellTexture("Steady Shot"))
         _mainTimelineSteadyIcon[i]:SetPoint("LEFT", _parentFrame, "LEFT", 0, 0)
 	_mainTimelineSteadyIcon[i]:SetWidth(20)
 	_mainTimelineSteadyIcon[i]:SetHeight(20)
