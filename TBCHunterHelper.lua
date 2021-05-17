@@ -110,6 +110,7 @@ local _arcanepreview = nil
 local _raptorpreview = nil
 local _whitepreview = nil
 
+
 function Start()
 	--/run print(UnitRangedDamage("player"))
 	_baseBowSpeed = UnitRangedDamage("player")
@@ -585,20 +586,21 @@ function ArcaneshotEnd()
 end
 
 function OnUpdate()
+--print(UnitRangedDamage("player"))
 	local now = GetTime()
 	local delta = now - _lastGetTime
 
-	if _recalc and false then
+	if _recalc then
 		_recalc = false
 		getNewTimeline()
-		drawGuitarHeroTimeline()
-	else 
+	elseif _lastBActual > 0 then
 		for i = 0, _currentSize -1
 		do
 			_timeStart[i] = _timeStart[i] - delta
 		end
-		drawGuitarHeroTimeline()
 	end
+
+	drawGuitarHeroTimeline()
 
 
 	local time = GetTime() - GetSpellCooldown("Serpent Sting")
@@ -674,6 +676,8 @@ function drawGuitarHeroTimeline()
 	_mark:SetWidth(140)
 	_mark:SetHeight(5)
 	_mark:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 70, _yOffset - 10)
+
+
 	
     for i = 0, _mainTimelineGCDCount - 1 
     do 
@@ -738,7 +742,7 @@ function drawGuitarHeroTimeline()
 		elseif _actionID[0] == 5 then
 			offset = -60
 	        end
-		_highlight:SetPoint("LEFT", UIParent, "LEFT", _xOffset + offset, _yOffset + _timeStart[0] * length)
+		_highlight:SetPoint("LEFT", UIParent, "LEFT", _xOffset + xoffset, _yOffset + 10 + _timeStart[0] * length)
 		_highlight:Show()
 	else 
 		_highlight:Hide()
