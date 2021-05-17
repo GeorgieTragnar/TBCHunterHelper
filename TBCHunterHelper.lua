@@ -750,27 +750,27 @@ function drawGuitarHeroTimeline()
 
     for i = 0, _currentSize - 1
     do
-        if _actionID[i] == 0 then
+        if _actionID[i] == 0 and _timeStart[i] > 0 then
             _mainTimelineAutoIcon[auto]:Show()
             _mainTimelineAutoIcon[auto]:SetPoint("LEFT", _parentFrame, "LEFT", 40, _timeStart[i] * length)
             auto = auto + 1
-        elseif _actionID[i] == 1 then
+        elseif _actionID[i] == 1 and _timeStart[i] > 0 then
             _mainTimelineSteadyIcon[steady]:Show()
             _mainTimelineSteadyIcon[steady]:SetPoint("LEFT", _parentFrame, "LEFT", 20, _timeStart[i] * length)
             steady = steady + 1
-        elseif _actionID[i] == 2 then
+        elseif _actionID[i] == 2 and _timeStart[i] > 0 then
             _mainTimelineMultiIcon[multi]:Show()
             _mainTimelineMultiIcon[multi]:SetPoint("LEFT", _parentFrame, "LEFT", 0, _timeStart[i] * length)
             multi = multi + 1
-        elseif _actionID[i] == 3 then
+        elseif _actionID[i] == 3 and _timeStart[i] > 0 then
             _mainTimelineArcaneIcon[arcane]:Show()
             _mainTimelineArcaneIcon[arcane]:SetPoint("LEFT", _parentFrame, "LEFT", -20, _timeStart[i] * length)
             arcane = arcane + 1
-        elseif _actionID[i] == 4 then
+        elseif _actionID[i] == 4 and _timeStart[i] > 0 then
             _mainTimelineRaptorIcon[raptor]:Show()
             _mainTimelineRaptorIcon[raptor]:SetPoint("LEFT", _parentFrame, "LEFT", -40, _timeStart[i] * length)
             raptor = raptor + 1
-        elseif _actionID[i] == 5 then
+        elseif _actionID[i] == 5 and _timeStart[i] > 0 then
             _mainTimelineSwingIcon[swing]:Show()
             _mainTimelineSwingIcon[swing]:SetPoint("LEFT", _parentFrame, "LEFT", -60, _timeStart[i] * length)
             swing = swing + 1
