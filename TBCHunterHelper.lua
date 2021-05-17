@@ -84,7 +84,7 @@ local _step = 0.01
 local _arcaneCoef = 0.3
 local _multiCoef = 0.6
 local _steadyCoef = 1
-local _weaveDur = 0.3
+local _weaveDur = 0.6
 
 local _inCombat = 0
 local _xOffset = 800
