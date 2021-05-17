@@ -436,12 +436,16 @@ end
 
 function RaptorStrikeCast()
 	_recalc = true
+		getNewTimeline()
+		drawGuitarHeroTimeline()
 	_raptorCdLeftActual = 6
 	Swing()
 end
 
 function Swing()
 	_recalc = true
+		getNewTimeline()
+		drawGuitarHeroTimeline()
 	_lastMActual = UnitAttackSpeed("player")
 end
 
@@ -884,6 +888,7 @@ function getNewTimeline()
     -- TODO            
 
 	_gcd = _gcdActual
+print("gcd",_gcd)
 
 	_castLeft = _castLeftActual
 	_lastB = _lastBActual
@@ -962,7 +967,7 @@ function getNewTimeline()
             _currentSize = _currentSize + 1
         end
 
-	if _lastM <= 0 and _lastB > _weaveDur and _castLeft <= 0 then
+	if _gcd <= 0 and _lastM <= 0 and _lastB > _weaveDur and _castLeft <= 0 and false then
 		_castLeft = _weaveDur
 		if _raptorCdLeft <= 0 then
             		_actionID[arrayIndex] = 4
