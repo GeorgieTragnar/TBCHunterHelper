@@ -103,6 +103,13 @@ local _highlight = nil
 local _recalc = true
 local _zoom = false
 
+local _autopreview = nil
+local _steadypreview = nil
+local _multipreview = nil
+local _arcanepreview = nil
+local _raptorpreview = nil
+local _whitepreview = nil
+
 function Start()
 	--/run print(UnitRangedDamage("player"))
 	_baseBowSpeed = UnitRangedDamage("player")
@@ -150,42 +157,44 @@ print(_baseBowSpeed)
         _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 40, _yOffset - 20)
 	_autopreview:SetWidth(20)
 	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+        UIFrameFadeIn(_autopreview, 0, 0, 0.6)
 	
-	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("34120"))
-        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 20, _yOffset - 20)
-	_autopreview:SetWidth(20)
-	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+
+	_steadypreview = _currentTime:CreateTexture()
+	_steadypreview:SetTexture(GetSpellTexture("34120"))
+        _steadypreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 20, _yOffset - 20)
+	_steadypreview:SetWidth(20)
+	_steadypreview:SetHeight(20)
+        UIFrameFadeIn(_steadypreview, 0, 0, 0.6)
 	
-	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("Multi-Shot"))
-        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 0, _yOffset - 20)
-	_autopreview:SetWidth(20)
-	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+	_multipreview = _currentTime:CreateTexture()
+	_multipreview:SetTexture(GetSpellTexture("Multi-Shot"))
+        _multipreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 0, _yOffset - 20)
+	_multipreview:SetWidth(20)
+	_multipreview:SetHeight(20)
+        UIFrameFadeIn(_multipreview, 0, 0, 0.6)
 	
-	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("Arcane Shot"))
-        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 20, _yOffset - 20)
-	_autopreview:SetWidth(20)
-	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+
+	_arcanepreview = _currentTime:CreateTexture()
+	_arcanepreview:SetTexture(GetSpellTexture("Arcane Shot"))
+        _arcanepreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 20, _yOffset - 20)
+	_arcanepreview:SetWidth(20)
+	_arcanepreview:SetHeight(20)
+        UIFrameFadeIn(_arcanepreview, 0, 0, 0.6)
 	
-	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("Raptor Strike"))
-        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 40, _yOffset - 20)
-	_autopreview:SetWidth(20)
-	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+	_raptorpreview = _currentTime:CreateTexture()
+	_raptorpreview:SetTexture(GetSpellTexture("Raptor Strike"))
+        _raptorpreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 40, _yOffset - 20)
+	_raptorpreview:SetWidth(20)
+	_raptorpreview:SetHeight(20)
+        UIFrameFadeIn(_raptorpreview, 0, 0, 0.6)
 	
-	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("Attack"))
-        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 60, _yOffset - 20)
-	_autopreview:SetWidth(20)
-	_autopreview:SetHeight(20)
-        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+	_whitepreview = _currentTime:CreateTexture()
+	_whitepreview:SetTexture(GetSpellTexture("Attack"))
+        _whitepreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 60, _yOffset - 20)
+	_whitepreview:SetWidth(20)
+	_whitepreview:SetHeight(20)
+        UIFrameFadeIn(_whitepreview, 0, 0, 0.6)
 
 	_gcdPanel = _currentTime:CreateTexture()
 	_gcdPanel:SetWidth(0)
@@ -417,79 +426,100 @@ end
         _mainTimelineGCD[i]:SetPoint("LEFT", _parentFrame, "LEFT", 0, 10)
         _mainTimelineGCD[i]:Hide()
     end
-    drawTimeline()
+    --drawTimeline()
 	
+
+		getNewTimeline()
+		drawGuitarHeroTimeline()
 end
 
 function RaptorStrikeCast()
+	_recalc = true
 	_raptorCdLeftActual = 6
 	Swing()
 end
 
 function Swing()
+	_recalc = true
 	_lastMActual = UnitAttackSpeed("player")
 end
 
 function BloodlustStart()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual / 1.3
 	_bloodlustLeftActual = 40
 end
 
 function BloodlustEnd()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual * 1.3
 end
 
 function AbacusStart()
+	_recalc = true
 	_abacusLeftActual = 10
 end
 
 function AbacusEnd()
+	_recalc = true
 
 end
 
 function DSTStart()
+	_recalc = true
 	_dstLeftActual = 10
 end
 
 function DSTEnd()
+	_recalc = true
 
 end
 
 function HastepotStart()
+	_recalc = true
 	_hastepotLeftActual = 15
 end
 
 function HastepotEnd()
+	_recalc = true
 
 end
 
 function DrumsStart()
+	_recalc = true
 	_drumsLeftActual = 30
 end
 
 function DrumsEnd()
+	_recalc = true
 
 end
 
 function RapidFireStart()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual / 1.4
 	_rapidLeftActual = 15
 end
 
 function RapidFireEnd()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual * 1.4
 end
 
 function QuickShotsStart()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual / 1.15
 	_hawkLeftActual = 12
 end
 
 function QuickShotsEnd()
+	_recalc = true
 	_currentSpeedActual = _currentSpeedActual * 1.15
 end
 
 function AutoshotStart()
+        UIFrameFadeIn(_autopreview, 0, 0, 1)
+	_recalc = true
 	--_simulatedAutoshotPanel:Show()
 	_simulatedAutoshotPanel:SetWidth(50 * _currentSpeedActual)
 	_simulatedAutoshot = true
@@ -499,6 +529,8 @@ function AutoshotStart()
 end
 
 function AutoshotEnd()
+        UIFrameFadeIn(_autopreview, 0, 0, 0.6)
+	_recalc = true
 	_simulatedAutoshotPanel:Hide()
 	_simulatedAutoshot = false
 	--_lastBActual = _baseBowSpeed * _currentSpeedActual - 0.5 * _currentSpeedActual
@@ -507,11 +539,15 @@ function AutoshotEnd()
 end
 
 function SteadyshotStart()
+        UIFrameFadeIn(_steadypreview, 0, 0, 1)
+	_recalc = true
 	_castLeftActual = 1.5 * _currentSpeedActual
 	--print("steady")
 end
 
 function SteadyshotEnd()
+        UIFrameFadeIn(_steadypreview, 0, 0, 0.6)
+	_recalc = true
 --	_castLeftActual = 0
 -- only for testing with serpent sting
 	_castLeftActual = 1.5 * _currentSpeedActual
@@ -521,22 +557,28 @@ function SteadyshotEnd()
 end
 
 function MultishotStart()
+        UIFrameFadeIn(_multipreview, 0, 0, 1)
+	_recalc = true
 	_castLeftActual = 0.5 * _currentSpeedActual
 	--print("multi")
 end
 
 function MultishotEnd()
+        UIFrameFadeIn(_multipreview, 0, 0, 0.6)
+	_recalc = true
 	_castLeftActual = 0
 	_multiCdLeftActual = 10
 	--print("multi")
 end
 
 function ArcaneshotStart()
+	_recalc = true
 	_castLeftActual = 0
 	--print("arcane")
 end
 
 function ArcaneshotEnd()
+	_recalc = true
 	_castLeftActual = 0
 	_arcaneCdLeftActual = 6
 	--print("arcane")
@@ -546,10 +588,15 @@ function OnUpdate()
 	local now = GetTime()
 	local delta = now - _lastGetTime
 
-	if _recalc then
-		_recalc = true
+	if _recalc and false then
+		_recalc = false
 		getNewTimeline()
-		--drawTimeline()
+		drawGuitarHeroTimeline()
+	else 
+		for i = 0, _currentSize -1
+		do
+			_timeStart[i] = _timeStart[i] - delta
+		end
 		drawGuitarHeroTimeline()
 	end
 
