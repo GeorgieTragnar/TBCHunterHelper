@@ -153,7 +153,7 @@ print(_baseBowSpeed)
         UIFrameFadeIn(_autopreview, 0, 0, 0.7)
 	
 	_autopreview = _currentTime:CreateTexture()
-	_autopreview:SetTexture(GetSpellTexture("Serpent Sting"))
+	_autopreview:SetTexture(GetSpellTexture("34120"))
         _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset + 20, _yOffset - 20)
 	_autopreview:SetWidth(20)
 	_autopreview:SetHeight(20)
@@ -169,6 +169,20 @@ print(_baseBowSpeed)
 	_autopreview = _currentTime:CreateTexture()
 	_autopreview:SetTexture(GetSpellTexture("Arcane Shot"))
         _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 20, _yOffset - 20)
+	_autopreview:SetWidth(20)
+	_autopreview:SetHeight(20)
+        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+	
+	_autopreview = _currentTime:CreateTexture()
+	_autopreview:SetTexture(GetSpellTexture("Raptor Strike"))
+        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 40, _yOffset - 20)
+	_autopreview:SetWidth(20)
+	_autopreview:SetHeight(20)
+        UIFrameFadeIn(_autopreview, 0, 0, 0.7)
+	
+	_autopreview = _currentTime:CreateTexture()
+	_autopreview:SetTexture(GetSpellTexture("Attack"))
+        _autopreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 60, _yOffset - 20)
 	_autopreview:SetWidth(20)
 	_autopreview:SetHeight(20)
         UIFrameFadeIn(_autopreview, 0, 0, 0.7)
@@ -326,7 +340,7 @@ end
         _mainTimelineSteady[i]:Hide()
 
         _mainTimelineSteadyIcon[i] = _parentFrame:CreateTexture()
-	_mainTimelineSteadyIcon[i]:SetTexture(GetSpellTexture("Steady Shot"))
+	_mainTimelineSteadyIcon[i]:SetTexture(GetSpellTexture("34120"))
         _mainTimelineSteadyIcon[i]:SetPoint("LEFT", _parentFrame, "LEFT", 0, 0)
 	_mainTimelineSteadyIcon[i]:SetWidth(20)
 	_mainTimelineSteadyIcon[i]:SetHeight(20)
@@ -403,7 +417,6 @@ end
         _mainTimelineGCD[i]:SetPoint("LEFT", _parentFrame, "LEFT", 0, 10)
         _mainTimelineGCD[i]:Hide()
     end
-    message('done init')
     drawTimeline()
 	
 end
