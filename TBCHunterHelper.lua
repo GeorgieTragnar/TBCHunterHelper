@@ -245,8 +245,8 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(...)
 	--print(timestamp, subevent, sourceGUID, sourceName, arg1, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, arg4, arg5, arg6)
 	
 	if sourceName == _playerName then
-		print(subevent, spellName)
-print(timestamp, subevent, sourceGUID, sourceName, arg1, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
+		--print(subevent, spellName)
+--print(timestamp, subevent, sourceGUID, sourceName, arg1, sourceFlags, sourceRaidFlags, destGUID, destName, destFlags, destRaidFlags, spellID, spellName, arg4, arg5, arg6, arg7, arg8, arg9, arg10)
 		
 		if subevent == "SPELL_CAST_SUCCESS" then
 			if spellName == "Auto Shot" then
@@ -311,7 +311,7 @@ print(timestamp, subevent, sourceGUID, sourceName, arg1, sourceFlags, sourceRaid
 		end
 
 		if subevent == "SWING_DAMAGE" then
-			print(UnitAttackSpeed("player"))
+			--print(UnitAttackSpeed("player"))
 			Swing()
 		end
 	end
@@ -743,7 +743,7 @@ function drawGuitarHeroTimeline()
 			offset = -60
 	        end
 		_highlight:SetPoint("LEFT", UIParent, "LEFT", _xOffset + xoffset, _yOffset + 10 + _timeStart[0] * length)
-		_highlight:Show()
+		--_highlight:Show()
 	else 
 		_highlight:Hide()
 	end
