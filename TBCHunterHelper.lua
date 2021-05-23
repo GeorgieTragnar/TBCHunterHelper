@@ -594,7 +594,7 @@ function OnUpdate()
 	local now = GetTime()
 	local delta = now - _lastGetTime
 
-	if _recalc then
+	if _recalc or true then
 		_recalc = false
 		getNewTimeline()
 	elseif _lastBActual > 0 then
@@ -888,7 +888,7 @@ function getNewTimeline()
     -- TODO            
 
 	_gcd = _gcdActual
-print("gcd",_gcd)
+--print("gcd",_gcd)
 
 	_castLeft = _castLeftActual
 	_lastB = _lastBActual
@@ -1009,7 +1009,7 @@ print("gcd",_gcd)
                     _gcdInvoke[arrayIndex] = 1
                     arrayIndex = arrayIndex + 1
                     _currentSize = _currentSize + 1
-                else 
+                elseif false then
                     _gcd = 1.5
                     _castLeft = currentBowSpeed * 1.5
 
