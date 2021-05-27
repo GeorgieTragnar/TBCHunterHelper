@@ -3,9 +3,16 @@ local _, TBCHunterHelper = ...
 local TBCHunterHelper = LibStub("AceAddon-3.0"):NewAddon(TBCHunterHelper, "TBCHunterHelper", "AceConsole-3.0", "AceEvent-3.0")
 local LCG = LibStub("LibCustomGlow-1.0")
 
+local _timeToPredict = 9.0	--time to predict
+local _xOffset = 936 - 220		--position horizontally
+local _yOffset = -72 -150		--position vertically
+
+local _normalSpeed = 40		--base speed (and thus size)
+local _fasterSpeed = 60		--speed during rapid fire
 
 
-local _timeToPredict = 10.0
+--global vars
+
 local _currentSize = 0
 local _currentTimeProgress = 0.0
 local _actionID = {} -- 0 - autoshot - 1 - steadyshot - 2 - multishot - 3 - arcaneshot - 4 - raptor - 5 - swing
@@ -38,7 +45,7 @@ local _mainTimelineRaptorIcon = {}
 
 
 local _baseBowSpeed = 1
-local _baseMeleeSpeed = 2.6
+local _baseMeleeSpeed = 1
 local _baseSpeed = 1.0 
 local _baseMeleeSpeedMod = 1.0
 
@@ -87,8 +94,6 @@ local _steadyCoef = 1
 local _weaveDur = 0.6
 
 local _inCombat = 0
-local _xOffset = 800
-local _yOffset = -200
 
 local _lastGetTime = 0
 local _lastSpellcast = -1
@@ -114,7 +119,7 @@ local _whitepreview = nil
 function Start()
 	--/run print(UnitRangedDamage("player"))
 	_baseBowSpeed = UnitRangedDamage("player")
-
+	_baseMeleeSpeed = UnitAttackSpeed("player")
 print(_baseBowSpeed)
 --print(GetRangedHaste("player"))
 
@@ -185,14 +190,14 @@ print(_baseBowSpeed)
 	
 	_raptorpreview = _currentTime:CreateTexture()
 	_raptorpreview:SetTexture(GetSpellTexture("Raptor Strike"))
-        _raptorpreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 40, _yOffset - 20)
+        _raptorpreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 60, _yOffset - 20)
 	_raptorpreview:SetWidth(20)
 	_raptorpreview:SetHeight(20)
         UIFrameFadeIn(_raptorpreview, 0, 0, 0.6)
 	
 	_whitepreview = _currentTime:CreateTexture()
 	_whitepreview:SetTexture(GetSpellTexture("Attack"))
-        _whitepreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 60, _yOffset - 20)
+        _whitepreview:SetPoint("LEFT", _currentTime, "LEFT", _xOffset - 40, _yOffset - 20)
 	_whitepreview:SetWidth(20)
 	_whitepreview:SetHeight(20)
         UIFrameFadeIn(_whitepreview, 0, 0, 0.6)
@@ -310,7 +315,7 @@ function f:COMBAT_LOG_EVENT_UNFILTERED(...)
 			end
 		end
 
-		if subevent == "SWING_DAMAGE" then
+		if subevent == "SWING_DAMAGE" or subevent == "SWING_MISSED" then
 			--print(UnitAttackSpeed("player"))
 			Swing()
 		end
@@ -594,7 +599,7 @@ function OnUpdate()
 	local now = GetTime()
 	local delta = now - _lastGetTime
 
-	if _recalc then
+	if _recalc or true then
 		_recalc = false
 		getNewTimeline()
 	elseif _lastBActual > 0 then
@@ -724,13 +729,13 @@ function drawGuitarHeroTimeline()
 	local raptor = 0
     local gcd = 0
 
-	local length = 30
+	local length = _normalSpeed
 	if _zoom then
-		length = 60
+		length = _fasterSpeed 
 	end
 
 	if _simulatedAutoshot then
-		_mainTimelineAutoIcon[auto]:Show()
+		--_mainTimelineAutoIcon[auto]:Show()
 		_mainTimelineAutoIcon[auto]:SetPoint("LEFT", _parentFrame, "LEFT", 40, _castLeftActual * length - _currentSpeedActual * length)
 		auto = 1
 
@@ -752,31 +757,35 @@ function drawGuitarHeroTimeline()
 		_highlight:Hide()
 	end
 
+	--print(_actionID[0], _timeStart[0], "|", _actionID[1], _timeStart[1], "|", _actionID[2], _timeStart[2], "|")
     for i = 0, _currentSize - 1
     do
-        if _actionID[i] == 0 and _timeStart[i] > 0 then
+        if _actionID[i] == 0 and _timeStart[i] >= 0 then
             _mainTimelineAutoIcon[auto]:Show()
             _mainTimelineAutoIcon[auto]:SetPoint("LEFT", _parentFrame, "LEFT", 40, _timeStart[i] * length)
             auto = auto + 1
-        elseif _actionID[i] == 1 and _timeStart[i] > 0 then
+        elseif _actionID[i] == 1 and _timeStart[i] >= 0 then
             _mainTimelineSteadyIcon[steady]:Show()
             _mainTimelineSteadyIcon[steady]:SetPoint("LEFT", _parentFrame, "LEFT", 20, _timeStart[i] * length)
             steady = steady + 1
-        elseif _actionID[i] == 2 and _timeStart[i] > 0 then
+        elseif _actionID[i] == 2 and _timeStart[i] >= 0 then
             _mainTimelineMultiIcon[multi]:Show()
             _mainTimelineMultiIcon[multi]:SetPoint("LEFT", _parentFrame, "LEFT", 0, _timeStart[i] * length)
             multi = multi + 1
-        elseif _actionID[i] == 3 and _timeStart[i] > 0 then
+        elseif _actionID[i] == 3 and _timeStart[i] >= 0 then
             _mainTimelineArcaneIcon[arcane]:Show()
             _mainTimelineArcaneIcon[arcane]:SetPoint("LEFT", _parentFrame, "LEFT", -20, _timeStart[i] * length)
             arcane = arcane + 1
-        elseif _actionID[i] == 4 and _timeStart[i] > 0 then
+        elseif _actionID[i] == 4 and _timeStart[i] >= 0 then
             _mainTimelineRaptorIcon[raptor]:Show()
-            _mainTimelineRaptorIcon[raptor]:SetPoint("LEFT", _parentFrame, "LEFT", -40, _timeStart[i] * length)
+            _mainTimelineRaptorIcon[raptor]:SetPoint("LEFT", _parentFrame, "LEFT", -60, _timeStart[i] * length)
             raptor = raptor + 1
-        elseif _actionID[i] == 5 and _timeStart[i] > 0 then
             _mainTimelineSwingIcon[swing]:Show()
-            _mainTimelineSwingIcon[swing]:SetPoint("LEFT", _parentFrame, "LEFT", -60, _timeStart[i] * length)
+            _mainTimelineSwingIcon[swing]:SetPoint("LEFT", _parentFrame, "LEFT", -40, _timeStart[i] * length)
+            swing = swing + 1
+        elseif _actionID[i] == 5 and _timeStart[i] >= 0 then
+            _mainTimelineSwingIcon[swing]:Show()
+            _mainTimelineSwingIcon[swing]:SetPoint("LEFT", _parentFrame, "LEFT", -40, _timeStart[i] * length)
             swing = swing + 1
         end
     end
@@ -888,8 +897,8 @@ function getNewTimeline()
     -- TODO            
 
 	_gcd = _gcdActual
-print("gcd",_gcd)
-
+--print("gcd",_gcd)
+--print(_lastBActual, _lastMActual)
 	_castLeft = _castLeftActual
 	_lastB = _lastBActual
 	_lastM = _lastMActual
@@ -967,27 +976,37 @@ print("gcd",_gcd)
             _currentSize = _currentSize + 1
         end
 
-	if _gcd <= 0 and _lastM <= 0 and _lastB > _weaveDur and _castLeft <= 0 and false then
-		_castLeft = _weaveDur
+	if _lastM <= 0 then --and _castLeft <= 0 then -- and _lastB > _weaveDur then --and _castLeft <= 0 then
+		--_castLeft = _weaveDur
+		_castLeft = 0
 		if _raptorCdLeft <= 0 then
             		_actionID[arrayIndex] = 4
 			_raptorCdLeft = 6
-		else
-            		_actionID[arrayIndex] = 5
+            		_castDur[arrayIndex] = _castLeft
+            		_timeStart[arrayIndex] = t / 100
+            		_gcdInvoke[arrayIndex] = 0
+            		arrayIndex = arrayIndex + 1
+            		_currentSize = _currentSize + 1
 		end
+            	_actionID[arrayIndex] = 5
 		_lastM = _baseMeleeSpeed * currentMeleeSpeed
-            	_timeStart[arrayIndex] = t / 100
             	_castDur[arrayIndex] = _castLeft
+            	_timeStart[arrayIndex] = t / 100
             	_gcdInvoke[arrayIndex] = 0
             	arrayIndex = arrayIndex + 1
             	_currentSize = _currentSize + 1
 	end
 
         if _castLeft <= 0 and _gcd <= 0 then
-            if (_lastB < (currentBowSpeed * 1.5 * _arcaneCoef) and _arcaneCdLeft <= 0) or
-            (_lastB < (currentBowSpeed * 1.5 * _multiCoef) and _multiCdLeft <= 0) or
+            --if (_lastB < (currentBowSpeed * 1.5 * _arcaneCoef) and _arcaneCdLeft <= 0) or
+            --(_lastB < (currentBowSpeed * 1.5 * _multiCoef) and _multiCdLeft <= 0) or
+            --(_lastB > (currentBowSpeed * 1.5 * _steadyCoef)) then
+
+            if (_arcaneCdLeft <= 0) or
+            (_multiCdLeft <= 0) or
             (_lastB > (currentBowSpeed * 1.5 * _steadyCoef)) then
-                if (_lastB < (currentBowSpeed * 1.5 * _arcaneCoef) and _arcaneCdLeft <= 0) then 
+                --if (_lastB < (currentBowSpeed * 1.5 * _arcaneCoef) and _arcaneCdLeft <= 0) then 
+                if (_arcaneCdLeft <= 0) then 
                     _gcd = 1.5
                     _castLeft = 0
                     _arcaneCdLeft = 6                                                           
@@ -998,7 +1017,8 @@ print("gcd",_gcd)
                     _gcdInvoke[arrayIndex] = 1
                     arrayIndex = arrayIndex + 1
                     _currentSize = _currentSize + 1
-                elseif (_lastB < (currentBowSpeed * 1.5 * _multiCoef) and _multiCdLeft <= 0) then
+                --elseif (_lastB < (currentBowSpeed * 1.5 * _multiCoef) and _multiCdLeft <= 0) then
+                elseif (_multiCdLeft <= 0) then
                     _gcd = 1.5
                     _castLeft = currentBowSpeed * 0.5
                     _multiCdLeft = 10
@@ -1009,7 +1029,7 @@ print("gcd",_gcd)
                     _gcdInvoke[arrayIndex] = 1
                     arrayIndex = arrayIndex + 1
                     _currentSize = _currentSize + 1
-                else 
+                elseif false then
                     _gcd = 1.5
                     _castLeft = currentBowSpeed * 1.5
 
@@ -1035,6 +1055,8 @@ print("gcd",_gcd)
         _bloodlustLeft = _bloodlustLeft - _step
         _hastepotLeft = _hastepotLeft - _step
 	_drumsLeft = _drumsLeft - _step
+	if _raptorCdLeft == nil then _raptorCdLeft = -step
+	else _raptorCdLeft = _raptorCdLeft - _step end
 	if _multiCdLeft == nil then _multiCdLeft = -_step
 	else _multiCdLeft = _multiCdLeft - _step end
         _arcaneCdLeft = _arcaneCdLeft - _step
